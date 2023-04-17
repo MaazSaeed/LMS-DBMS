@@ -25,15 +25,6 @@ CREATE TABLE courses (
   FOREIGN KEY(instructor_id) REFERENCES instructors(instructor_id)
 );
 
--- Create junction table for student-courses relationship
-CREATE TABLE student_courses (
-  student_id INT NOT NULL,
-  course_id INT NOT NULL,
-  PRIMARY KEY (student_id, course_id),
-  FOREIGN KEY (student_id) REFERENCES students(student_id),
-  FOREIGN KEY (course_id) REFERENCES courses(course_id)
-);
-
 -- Create table for instructors
 CREATE TABLE instructors (
   instructor_id INT PRIMARY KEY,
@@ -45,13 +36,15 @@ CREATE TABLE instructors (
 
 -- Create table for enrollments
 CREATE TABLE enrollments (
-  enrollment_id INT PRIMARY KEY,
+  --have a primary key made of student_id, course_id and section
   student_id INT NOT NULL,
   course_id INT NOT NULL,
   enrollment_date DATE NOT NULL,
   grade VARCHAR(2),
+  section VARCHAR(1),
+  PRIMARY KEY (student_id, course_id, section),
   FOREIGN KEY (student_id) REFERENCES students(student_id),
-  FOREIGN KEY (course_id) REFERENCES courses(course_id)
+  FOREIGN KEY (course_id, section) REFERENCES courses(course_id, section)
 );
 
 --course_division caters to assignments, quizzes, mid and final
@@ -101,10 +94,11 @@ CREATE TABLE semester_courses (
 
 CREATE TABLE attendance (
   student_id INT NOT NULL,
-  course_id INT NOT NULL,
+  course_division_id INT NOT NULL,
   att_date DATE NOT NULL,
-  att_status BOOLEAN NOT NULL,
+  status BOOLEAN NOT NULL,
+  PRIMARY KEY (student_id, course_division_id, date),
   FOREIGN KEY (student_id) REFERENCES students(student_id),
-  FOREIGN KEY (course_id) REFERENCES courses(course_id),
-  PRIMARY KEY (student_id, course_id, att_date)
+  FOREIGN KEY (course_division_id) REFERENCES course_division(cd_id)
 );
+
