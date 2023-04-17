@@ -20,7 +20,8 @@ CREATE TABLE courses (
   instructor_id VARCHAR(100) NOT NULL,
   course_description TEXT,
   credits INT NOT NULL,
-  faculty VARCHAR(4) CHECK IN ()
+  faculty VARCHAR(4) CHECK IN ('FCSE', 'FMCE', 'FME', 'FES', 'FCVE', 'FEE'),
+  c_type VARCHAR(10) CHECK IN ('core', 'elective'),
   PRIMARY KEY(course_id, section),
   FOREIGN KEY(instructor_id) REFERENCES instructors(instructor_id)
 );
