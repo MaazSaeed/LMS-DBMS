@@ -96,11 +96,12 @@ CREATE TABLE semester_courses (
 
 CREATE TABLE attendance (
   student_id INT NOT NULL,
-  course_division_id INT NOT NULL,
+  course_id INT NOT NULL,
+  section VARCHAR (1) NOT NULL,
   att_date DATE NOT NULL,
-  status BOOLEAN NOT NULL,
-  PRIMARY KEY (student_id, course_division_id, date),
+  att_status BOOLEAN NOT NULL,
+  PRIMARY KEY (student_id, course_id, section, att_date),
   FOREIGN KEY (student_id) REFERENCES students(student_id),
-  FOREIGN KEY (course_division_id) REFERENCES course_division(cd_id)
+  FOREIGN KEY (course_id, section) REFERENCES courses(course_id, section)
 );
 
