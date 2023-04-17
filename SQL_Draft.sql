@@ -34,6 +34,7 @@ CREATE TABLE instructors (
   department VARCHAR(50) NOT NULL
 );
 
+--comment
 -- Create table for enrollments
 CREATE TABLE enrollments (
   --have a primary key made of student_id, course_id and section
