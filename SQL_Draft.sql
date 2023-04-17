@@ -17,7 +17,6 @@ CREATE TABLE courses (
   course_id INT,
   section VARCHAR(1) NOT NULL,
   course_name VARCHAR(100) NOT NULL,
-  instructor_id VARCHAR(100) NOT NULL,
   course_description TEXT,
   credits INT NOT NULL,
   faculty VARCHAR(4) CHECK IN ('FCSE', 'FMCE', 'FME', 'FES', 'FCVE', 'FEE'),
@@ -44,16 +43,6 @@ CREATE TABLE instructors (
   department VARCHAR(50) NOT NULL
 );
 
--- Create table for assignments
-CREATE TABLE assignments (
-  assignment_id INT PRIMARY KEY,
-  course_id INT NOT NULL,
-  assignment_name VARCHAR(100) NOT NULL,
-  assignment_description TEXT,
-  due_date DATE NOT NULL,
-  FOREIGN KEY (course_id) REFERENCES courses(course_id)
-);
-
 -- Create table for enrollments
 CREATE TABLE enrollments (
   enrollment_id INT PRIMARY KEY,
@@ -65,24 +54,25 @@ CREATE TABLE enrollments (
   FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
--- Create table for attendance
-CREATE TABLE attendance (
-  attendance_id INT PRIMARY KEY,
+--course_division caters to assignments, quizzes, mid and final
+CREATE TABLE course_division (
+  cd_id INT PRIMARY KEY,
+  cd_name VARCHAR(100) NOT NULL,
+  weightage DECIMAL(3,2) NOT NULL,
+  cd_type VARCHAR(20) NOT NULL,
+  due_date DATE NOT NULL,
   course_id INT NOT NULL,
-  student_id INT NOT NULL,
-  attendance_date DATE NOT NULL,
-  FOREIGN KEY (course_id) REFERENCES courses(course_id),
-  FOREIGN KEY (student_id) REFERENCES students(student_id)
+  FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
 -- Create table for submissions
 CREATE TABLE submissions (
-  assignment_id INT NOT NULL,
+  cd_id INT NOT NULL,
   student_id INT NOT NULL,
   submission_date DATE NOT NULL,
   grade VARCHAR(2),
-  PRIMARY KEY (assignment_id, student_id),
-  FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id),
+  PRIMARY KEY (cd_id, student_id),
+  FOREIGN KEY (cd_id) REFERENCES course_division(cd_id),
   FOREIGN KEY (student_id) REFERENCES students(student_id)
 );
 
@@ -106,16 +96,6 @@ CREATE TABLE semester_courses (
   course_id INT NOT NULL,
   PRIMARY KEY (semester_id, course_id),
   FOREIGN KEY (semester_id) REFERENCES semesters(semester_id),
-  FOREIGN KEY (course_id) REFERENCES courses(course_id)
-);
-
-CREATE TABLE course_division (
-  cd_id INT PRIMARY KEY,
-  cd_name VARCHAR(100) NOT NULL,
-  weightage DECIMAL(3,2) NOT NULL,
-  cd_type VARCHAR(20) NOT NULL,
-  due_date DATE NOT NULL,
-  course_id INT NOT NULL,
   FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
