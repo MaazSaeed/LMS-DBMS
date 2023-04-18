@@ -23,7 +23,7 @@ CREATE TABLE courses (
   CONSTRAINT cr_pk PRIMARY KEY(course_id, c_section),
   FOREIGN KEY(instructor_id) REFERENCES instructors(instructor_id)
 );
-drop table courses Cascade;
+
 CREATE TABLE student_courses (
   student_id INT NOT NULL,
   course_id INT NOT NULL,
