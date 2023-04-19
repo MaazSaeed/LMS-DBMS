@@ -6,6 +6,18 @@ CREATE TABLE students (
   email VARCHAR(100) UNIQUE NOT NULL,
   major VARCHAR(50) NOT NULL,
   cgpa DECIMAL(3,2), -- check constraint removed as cgpa will be calculated using data in db
+  sex VARCHAR(1), -- check constraint not working in ElephantSQL
+  birthdate DATE NOT NULL,
+  cnic INT UNIQUE NOT NULL
+);
+
+CREATE TABLE instructors (
+  instructor_id INT PRIMARY KEY,
+  first_name VARCHAR(50) NOT NULL,
+  middle_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  department VARCHAR(50) NOT NULL,
   sex VARCHAR(1) CHECK (sex IN ('m', 'f')),
   birthdate DATE NOT NULL,
   cnic INT NOT NULL
@@ -132,3 +144,69 @@ CREATE TABLE sem_gpa (
   PRIMARY KEY (student_id, s_year, s_name),
   FOREIGN KEY (student_id) REFERENCES students(student_id)
 );
+
+CREATE VIEW student_marks AS
+	SELECT s.cd_id, s.marks s_marks, cd.total_marks s_total_marks, cd.weightage s_weightage 
+	FROM course_division cd, submissions s
+	WHERE s.student_id = 1;
+	
+DROP VIEW student_marks;
+DROP FUNCTION gradeCalculate();
+
+CREATE OR REPLACE FUNCTION gradeCalculate()
+RETURNS char(2)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	grade char(2);
+	weighted_marks int := 0;
+	totalmarks int:= 0;
+	weightage int:= 0;
+	marks int:= 0;
+	cursor_totalmarks CURSOR FOR SELECT s_total_marks FROM student_marks;
+	cursor_weightage CURSOR FOR SELECT s_weightage FROM student_marks;
+	cursor_marks CURSOR FOR SELECT s_marks FROM student_marks; 
+BEGIN
+	OPEN cursor_totalmarks;
+	OPEN cursor_weightage;
+	OPEN cursor_marks;
+	LOOP
+		FETCH cursor_totalmarks INTO totalmarks;
+		FETCH cursor_weightage INTO weightage;
+		FETCH cursor_marks INTO marks;
+		EXIT WHEN NOT FOUND;		
+		weighted_marks := weighted_marks + ((marks/totalmarks)*weightage);
+	END LOOP;
+	CLOSE cursor_totalmarks;
+	CLOSE cursor_weightage;
+	CLOSE cursor_marks;
+	IF weighted_marks > 90 THEN 
+		grade = 'A';
+	ELSE
+		grade = 'B';
+	END IF;
+	RETURN grade;			
+END; $$;
+
+INSERT INTO students(student_id, first_name, middle_name, last_name, email, major, cgpa, sex, birthdate, cnic)
+VALUES(1, 'Arv',	'Noreen', 'Oliphand',	'noliphand0@columbia.edu',	'FCSE',	NULL, 'm', '01-01-2001', 123456789);
+
+insert into courses(course_id, c_section, course_name, instructor_id, course_description, credits, faculty, c_type)
+values(121, 'A', 'Criminology', 169, 'Intro to crimes', 3, 'FCSE', 'core');
+
+INSERT INTO instructors(instructor_id, first_name, middle_name, last_name, email, department, sex, birthdate, cnic)
+VALUES(169, 'Mohsin', 'M', 'Zafar', 'xyz@gmail.com', 'FCSE', 'm', '01-01-1980', 19234578);
+
+INSERT INTO course_division(cd_type, cd_name, total_marks, weightage, due_date, course_id, c_section)
+VALUES('a', 'b', 50, 45, '01-01-2023', 121, 'A'),
+('a', 'b', 45,55, '01-01-2023', 121, 'A');
+
+INSERT INTO submissions (cd_id, student_id, submitted, marks)
+VALUES(3, 1, TRUE, 50),
+(4, 1, TRUE, 45);
+
+UPDATE submissions SET marks = 10 WHERE cd_id = 3;
+UPDATE submissions SET marks = 10 WHERE cd_id = 4;
+SELECT * FROM course_division;
+
+SELECT gradeCalculate();
