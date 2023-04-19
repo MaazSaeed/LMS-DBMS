@@ -11,6 +11,7 @@ CREATE TABLE students (
   cnic INT UNIQUE NOT NULL
 );
 
+-- INSTRUCTORS TABLE IS REPEATED -- 
 CREATE TABLE instructors (
   instructor_id INT PRIMARY KEY,
   first_name VARCHAR(50) NOT NULL,
@@ -22,7 +23,7 @@ CREATE TABLE instructors (
   birthdate DATE NOT NULL,
   cnic INT NOT NULL
 );
- 
+
 CREATE TABLE courses (
   course_id INT NOT NULL,
   c_section VARCHAR(1) NOT NULL,
