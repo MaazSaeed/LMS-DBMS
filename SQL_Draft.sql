@@ -18,9 +18,9 @@ CREATE TABLE instructors (
   last_name VARCHAR(50) NOT NULL,
   email VARCHAR(100) UNIQUE NOT NULL,
   department VARCHAR(50) NOT NULL,
-  sex VARCHAR(1),
+  sex VARCHAR(1) CHECK (sex IN ('m', 'f')),
   birthdate DATE NOT NULL,
-  CNIC INT NOT NULL
+  cnic INT NOT NULL
 );
  
 CREATE TABLE courses (
@@ -46,11 +46,25 @@ CREATE TABLE student_courses (
   FOREIGN KEY (course_id, c_section) REFERENCES courses(course_id, c_section)
 );
 
+-- Create table for instructors
+CREATE TABLE instructors (
+  instructor_id INT PRIMARY KEY,
+  first_name VARCHAR(50) NOT NULL,
+  middle_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  department VARCHAR(50) NOT NULL,
+  sex VARCHAR(1) CHECK (sex IN ('m', 'f')),
+  birthdate DATE NOT NULL,
+  CNIC INT NOT NULL
+);
+
 CREATE TABLE enrollments (
   --have a primary key made of student_id, course_id and section
   student_id INT NOT NULL,
   course_id INT NOT NULL,
   c_section VARCHAR(1) NOT NULL,
+  enrollment_date DATE NOT NULL,
   grade VARCHAR(2), --can be NULL
   PRIMARY KEY (student_id, course_id, c_section),
   FOREIGN KEY (student_id) REFERENCES students(student_id),
