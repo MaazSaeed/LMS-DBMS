@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>CMS - Instructor Portal</title>
+  <!-- base:css -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/typicons/typicons.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/css/vendor.bundle.base.css')}}">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'css/vertical-layout-light/style.css')}}">
+  <!-- endinject -->
+  <!--<link rel="shortcut icon" href="../../images/favicon.png" />-->
+
+  <!-- Add Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <!-- Add jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <!-- Add Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="../../xp.jpg" alt="profile" />
+              <span class="nav-profile-name">{{ins.first_name}} {{ins.last_name}}</Reg></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item">
+                <i class="typcn typcn-eject text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+
+
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+          <span class="typcn typcn-th-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_settings-panel.html -->
+      <div class="theme-setting-wrapper">
+        <div id="settings-trigger"><i class="typcn typcn-cog-outline"></i></div>
+        <div id="theme-settings" class="settings-panel">
+          <i class="settings-close typcn typcn-times"></i>
+          <p class="settings-heading">SIDEBAR SKINS</p>
+          <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+            <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
+          </div>
+          <div class="sidebar-bg-options" id="sidebar-dark-theme">
+            <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
+          </div>
+        </div>
+      </div>
+
+      <!-- partial -->
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('ins_index') }}">
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('marks') }}">
+              <span class="menu-title">Marks</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('ins_attendance') }}">
+              <span class="menu-title">Attendance</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('ins_info') }}">
+              <span class="menu-title">Instructor Info</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <h3>Detailed Mark Sheet</h3>
+          <br>
+          {% for c in courses %}
+          <div class="row">
+            <div class="container">
+              <div class="d-flex justify-content-between">
+                <button class="toggleButton btn btn-primary" data-target="myTable">{{c.course_id}}/{{c.c_section}}</button>
+              </div>
+      
+              <form id="marksForm" style="display: none;">
+                <div class="form-group">
+                  <label for="totalMarks">Total Marks:</label>
+                  <textarea id="totalMarks" class="form-control" rows="1" placeholder="Enter total marks (0-100)" oninput="validateMarks(this)"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="weightage">Weightage:</label>
+                  <textarea id="weightage" class="form-control" rows="1" placeholder="Enter weightage (0-100)" oninput="validateMarks(this)"></textarea>
+                </div>
+      
+                <table id="myTable" class="toggleTable table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Reg Number</th>
+                      <th>Name</th>
+                      <th>Marks Obtained</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for s in students %}
+                    {% if s.course_id == c.course_id %}
+                    <tr>
+                      <td>{{s.student_id}}</td>
+                      <td>{{s.first_name}} {{s.last_name}}</td>
+                      <td>
+                        <input type="number" class="form-control" min="0" max="100" oninput="validateMarks(this)">
+                      </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+      
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+              <br>
+              {% endfor %}
+            </div>
+          </div>
+      
+          <script>
+            var toggleButtons = document.getElementsByClassName('toggleButton');
+            var marksForm = document.getElementById('marksForm');
+      
+            for (var i = 0; i < toggleButtons.length; i++) {
+              toggleButtons[i].addEventListener('click', function() {
+                var targetId = this.getAttribute('data-target');
+                var table = document.getElementById(targetId);
+      
+                if (table.style.display === 'none') {
+                  table.style.display = 'table';
+                  marksForm.style.display = 'block';
+                } else {
+                  table.style.display = 'none';
+                  marksForm.style.display = 'none';
+                }
+              });
+            }
+      
+            function validateMarks(element) {
+              var value = element.value.trim();
+              if (!/^\d{1,4}$/.test(value) || value < 0 || value > 100) {
+                element.value = "";
+              }
+            }
+          </script>
+          
+          <!-- Modal -->
+          
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+      
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+      </div>
+      
+      
+          
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+      
+        <!-- partial -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- base:js -->
+    <script src="../../vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page-->
+    <!-- End plugin js for this page-->
+    <!-- inject:js -->
+    <script src="../../js/off-canvas.js"></script>
+    <script src="../../js/hoverable-collapse.js"></script>
+    <script src="../../js/template.js"></script>
+    <script src="../../js/settings.js"></script>
+    <script src="../../js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page-->
+    <!-- End custom js for this page-->
+</body>
+
+</html>
+
+
+

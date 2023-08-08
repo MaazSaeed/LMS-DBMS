@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>CMS - Admin Portal</title>
+  <!-- base:css -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/typicons/typicons.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename = 'vendors/css/vendor.bundle.base.css')}}">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{{url_for('static', filename = 'css/vertical-layout-light/style.css')}}">
+  <!-- endinject -->
+</head>
+
+<body>
+
+
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="xp.jpg" alt="profile" />
+              <span class="nav-profile-name">Admin</Reg></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item">
+                <i class="typcn typcn-eject text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+
+
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+          data-toggle="offcanvas">
+          <span class="typcn typcn-th-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+
+    <div class="container-fluid page-body-wrapper">
+
+      <div class="theme-setting-wrapper">
+        <div id="settings-trigger"><i class="typcn typcn-cog-outline"></i></div>
+        <div id="theme-settings" class="settings-panel">
+          <i class="settings-close typcn typcn-times"></i>
+          <p class="settings-heading">SIDEBAR SKINS</p>
+          <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+            <div class="img-ss rounded-circle bg-light border mr-3"></div>Light
+          </div>
+          <div class="sidebar-bg-options" id="sidebar-dark-theme">
+            <div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark
+          </div>
+        </div>
+      </div>
+
+      <!-- partial -->
+      <div class="row col-lg-12">
+        <div class="col-xl-12 grid-margin stretch-card flex-column">
+          <h5 class="mb-2 text-titlecase mb-4">Admin</h5>
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body d-flex flex-column justify-content-between bg-light">
+                  <table class="table">
+
+                    <tbody>
+                      <form method= "post" action="/gpa_calc">
+                      <tr>
+                        <th style="vertical-align: middle; width: 20%;"><h5>GPA Calculator</h5></th>
+                        <td style="vertical-align: middle;">
+                          <div class="dropdown">
+                            <label for="s_name">
+                            </label>
+                              <select name = "s_name" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              
+                              
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <option value = "" disabled selected hidden>Semester</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">Fall</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">Spring</option>
+                            </div>
+                          </select>
+                          </div>
+                        </td>
+                        <td style="vertical-align: middle;">
+                          <label for = "s_year">  </label>
+                            <input type="text" name="s_year" id="s_year" class="form-control form-control-sm" style="width: 100px" oninput="validateYear(event)" required>
+                        </td>
+                        <td>
+                          <input type="submit" value="Submit" class="btn btn-success">
+                        </td>
+                      </tr>
+                      </form>
+                      {% if msg1 %}{{msg1}}{% endif %}
+                    </tbody>
+
+                    <tbody>
+                      <form method = "post" action="/advance_sem">
+                      <tr>
+                        <th style="vertical-align: middle; width: 20%;"><h5>Advance Semester</h5></th>
+                        <td style="vertical-align: middle;">
+                          <div class="dropdown">
+                            <label for = "sem_name"></label>
+                              <select name = "sem_name" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <option value = "" disabled selected hidden>Semester</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">Fall</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">Spring</option>
+                            </div>
+                          </select>
+                          </div>
+                        </td>
+                        <td style="vertical-align: middle;">
+                          <label for="sem_year"></label>
+                          <input type="text" name="sem_year" id="sem_year" class="form-control form-control-sm" style="width: 100px" oninput="validateYear(event)" required>
+                        </td>
+                        <td>
+                          <input type="submit" class="btn btn-success">
+                        </td>
+                      </tr>
+                      </form>
+                    </tbody>
+
+                    <tbody>
+                      <form method="POST" action="/add_course">
+                      <tr>
+                        <th><h4 style="display:flex;justify-content:left;align-items:center;">Add Course</h4>
+                          <br>
+                          <br>
+                        </th>
+                      </tr>
+                      <tr>
+                        <th style="vertical-align: middle; width: 20%;"><h5>Course ID</h5></th>
+                        <td style="vertical-align: middle;">
+                          <div class="dropdown">
+                            <label for = "course_code"></label>
+                              <select name = "course_code" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               
+                          
+                            
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <option value = "" disabled selected hidden>Course Code</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">HM</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">CS</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">CE</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">AI</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">DS</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">IF</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">ES</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">MT</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">ME</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">CH</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">PH</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">MM</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">MS</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">EE</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">CV</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">PE</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">BM</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">AF</option>
+                            </div>
+                          </select>
+                          </div>
+                        </td>
+                        <td style="vertical-align: middle;">
+                          <div class="dropdown">
+                            <label for = "year"></label>
+                              <select name = "year" class="btn btn-primary dropdown-toggle" type="submit" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                
+                          
+                            
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <option value = "" disabled selected hidden>Year</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">1</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">2</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">3</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">4</option>
+                            </div>
+                          </select>
+                          </div>
+                        </td>
+
+                        <td style="vertical-align: middle;">
+                          <label for = "digits"></label>
+                          <input type = "text" name = "digits" class="form-control form-control-sm" style="width: 100px" oninput="validateInput(event)">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+
+
+                  
+                  <table class="table">
+                    
+                    <tbody>
+                      <tr>
+                        <th style="vertical-align: middle; width: 20%;"><h5>Course Name</h5></th>
+                        <td style="vertical-align: middle;">
+                          <label for = "course_name"></label>
+                          <input type = "text" name = "course_name" class="form-control form-control-sm" style="width: 360px;">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <th style="vertical-align: middle; width: 20%;"><h5>Course Description</h5></th>
+                        <td style="vertical-align: middle;">
+                          <label for = "course_description"></label>
+                          <input type = "text" name = "course_description" class="form-control form-control-sm" style="width: 400px">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <th style="vertical-align: middle; width: 20%;"><h5>Credit Hours</h5></th>
+                        <td style="vertical-align: middle;">
+                          <div class="dropdown">
+                            <label for = "course_ch"></label>
+                            <select name = "course_ch" placeholder = "CHs" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              
+                              <option value = "" disabled selected hidden>CHs</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">1</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">2</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">3</option>
+                            </div>
+                          </select>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <th style="vertical-align: middle; width: 20%;"><h5>Faculty Offering</h5></th>
+                        <td style="vertical-align: middle;">
+                          <div class="dropdown">
+                            <label for = "faculty"></label>
+                              <select name = "faculty" class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                
+                          
+                            
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <option value = "" disabled selected hidden>Faculty</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">FCSE</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">FCVE</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">FME</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">FMGS</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">FMCE</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">FES</option>
+                              <option class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModal">FEE</option>
+                            </div>
+                          </select>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <!-- <table class="table">
+                    <tbody>
+                      <tr>
+                        <th style="vertical-align: middle; width: 20%;" class=""><h5>Section</h5></th>
+                        <td style="vertical-align: middle;">
+                          <label for = "c_section"></label>
+                          <input name = "c_section" type = "text" id="myTextarea" class="form-control form-control-sm" placeholder="letter"
+                            oninput="checkAndFilterInput(event)" style="width: 75px;">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table> -->
+
+                  <input type="submit" class="btn btn-outline-info">
+                  
+                  </form>
+                  {% if msg3 %}{{msg3}}{% endif %}
+                  <hr>
+                  <br>
+                  <hr>
+
+                  <div>
+                    <form method="POST" action="/delete_course">
+                    <h5>Delete Course</h5>
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <th style="vertical-align: middle; width: 20%;"><h5>Course ID</h5></th>
+                          <td style="vertical-align: middle;">
+                            <label for = "course_id"></label>
+                            <input type = "text" name = "course_id" class="form-control form-control-sm" style="width: 440px">
+                          </td>
+                        </tr>
+                      </tbody>
+
+                    </table>
+                    <div class="col-md-12">
+                      <input type="submit" class="btn btn-outline-danger btn-block" >
+                    </div>
+                  </form>
+                  </div>
+                  {% if msg4 %}{{msg4}}{% endif %}
+
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+
+
+
+        </div>
+      </div>
+
+
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- base:js -->
+  <script src="{{ url_for('static', filename='vendors/js/vendor.bundle.base.js')}}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{{ url_for('static', filename='vendors/chart.js/Chart.min.js')}}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{{ url_for('static', filename='js/off-canvas.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/hoverable-collapse.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/template.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/settings.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/todolist.js')}}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{{ url_for('static', filename='js/dashboard.js')}}"></script>
+  <!-- End custom js for this page-->
+
+
+  <script>
+    function checkAndFilterInput(event) {
+      let inputValue = event.target.value;
+      inputValue = inputValue.toUpperCase(); // Convert input to uppercase
+
+      if (inputValue.length > 1) {
+        inputValue = inputValue.slice(0, 1); // Limit input to one character
+      } else if (!/^[A-Z]$/.test(inputValue)) {
+        inputValue = ''; // Clear input if it's not a capital letter
+      }
+
+      event.target.value = inputValue;
+    }
+
+
+function validateYear(event)
+{
+    let inputValue = event.target.value;
+    inputValue = inputValue.replace(/\D/g, '');
+    if(inputValue.length >= 4)
+    {
+      inputValue = inputValue.slice(0, 4);
+    }
+    event.target.value = inputValue;
+}
+
+
+function validateInput(event) {
+  let inputValue = event.target.value;
+  inputValue = inputValue.replace(/\D/g, ''); // Remove all non-digit characters
+
+  if (inputValue.length > 2) {
+    inputValue = inputValue.slice(0, 2); // Limit input to two digits
+  }
+
+  event.target.value = inputValue;
+}
+
+  </script>
+
+
+
+</body>
+
+</html>
